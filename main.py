@@ -338,6 +338,7 @@ import pillow_avif  # This enables AVIF support in Pillow
 #         else:
 #             st.warning("No medicines available in the inventory.")
 
+ 
 def customer(username, password):
     if getauthenicate(username, password):
         st.markdown(f"<div class='main-title'>Welcome {username}!</div>", unsafe_allow_html=True)
@@ -353,43 +354,49 @@ def customer(username, password):
         drug_result = drug_view_all_data()
 
         if len(drug_result) > 0:
-            # Get list of images sorted by modification time
+            # Supported image formats
+            image_extensions = ['.jpg', '.jpeg', '.png', '.avif']
             image_folder = "images/"
-            image_files = [f for f in os.listdir(image_folder) if f.endswith(('.jpg', '.png', '.jpeg', '.avif'))]
-            image_files.sort(key=lambda x: os.path.getmtime(os.path.join(image_folder, x)), reverse=False)
 
-            # Use the full list of medicines (no random sampling)
-            medicines_to_show = drug_result  # Use the full list instead of random.sample
-            num_images = min(len(image_files), len(medicines_to_show))
+            # Iterate through all medicines in the database
+            for drug in drug_result:
+                drug_name = drug[0]  # Assuming drug name is the first column in the database
+                st.subheader(drug_name)
 
-            for i, drug in enumerate(medicines_to_show):
-                st.subheader(drug[0])
+                # Try to find the image file with supported extensions
+                image_path = None
+                for ext in image_extensions:
+                    temp_path = os.path.join(image_folder, f"{drug_name}{ext}")
+                    if os.path.exists(temp_path):
+                        image_path = temp_path
+                        break
 
-                # Assign images to drugs in order
-                if i < num_images:
-                    img_path = os.path.join(image_folder, image_files[i])
+                # Display the image if found
+                if image_path:
                     try:
-                        img = Image.open(img_path)
-                        st.image(img, width=400, caption=f"Price: Rs. {drug[3]}")
+                        img = Image.open(image_path)
+                        st.image(img, width=400, caption=f"Price: Rs. {drug[3]}")  # Assuming price is the 4th column
                     except Exception as e:
-                        st.warning(f"Failed to load image for {drug[0]}: {str(e)}")
+                        st.warning(f"Failed to load image for {drug_name}: {str(e)}")
                 else:
-                    st.warning("No image available for this drug.")
+                    st.warning(f"No image found for {drug_name} in supported formats: {', '.join(image_extensions)}")
 
+                # Quantity slider for each drug
                 quantity_slider = st.slider(
-                    label=f"Select Quantity for {drug[0]}",
+                    label=f"Select Quantity for {drug_name}",
                     min_value=0,
-                    max_value=int(drug[3]),
-                    key=f"slider_{drug[4]}"
+                    max_value=int(drug[3]),  # Assuming quantity is the 4th column
+                    key=f"slider_{drug[4]}"  # Assuming drug ID is the 5th column
                 )
-                st.info(f"When to Use: {drug[2]}")
+                st.info(f"When to Use: {drug[2]}")  # Assuming usage is the 3rd column
 
+            # Buy Now button
             if st.button("Buy Now"):
                 selected_items = []
-                for drug in medicines_to_show:
-                    quantity = st.session_state.get(f"slider_{drug[4]}", 0)
+                for drug in drug_result:
+                    quantity = st.session_state.get(f"slider_{drug[4]}", 0)  # Assuming drug ID is the 5th column
                     if quantity > 0:
-                        selected_items.append((drug[0], quantity))
+                        selected_items.append((drug[0], quantity))  # Drug name and quantity
 
                 if selected_items:
                     O_items = ",".join([item[0] for item in selected_items])
@@ -405,7 +412,76 @@ def customer(username, password):
                 else:
                     st.warning("No items selected for purchase.")
         else:
-            st.warning("No medicines available in the inventory.")
+            st.warning("No medicines available in the inventory.") 
+ 
+# def customer(username, password):
+#     if getauthenicate(username, password):
+#         st.markdown(f"<div class='main-title'>Welcome {username}!</div>", unsafe_allow_html=True)
+        
+#         st.title("Welcome to Pharmacy Store")
+#         st.subheader("Your Order Details")
+#         order_result = order_view_data(username)
+#         with st.expander("View All Order Data"):
+#             order_clean_df = pd.DataFrame(order_result, columns=["Name", "Items", "Qty", "ID"])
+#             st.dataframe(order_clean_df)
+
+#         st.subheader("Available Medicines")
+#         drug_result = drug_view_all_data()
+
+#         if len(drug_result) > 0:
+#             # Get list of images sorted by modification time
+#             image_folder = "images/"
+#             image_files = [f for f in os.listdir(image_folder) if f.endswith(('.jpg', '.png', '.jpeg', '.avif'))]
+#             image_files.sort(key=lambda x: os.path.getmtime(os.path.join(image_folder, x)), reverse=False)
+
+#             # Use the full list of medicines (no random sampling)
+#             medicines_to_show = drug_result  # Use the full list instead of random.sample
+#             num_images = min(len(image_files), len(medicines_to_show))
+
+#             for i, drug in enumerate(medicines_to_show):
+#                 st.subheader(drug[0])
+
+#                 # Assign images to drugs in order
+#                 if i < num_images:
+#                     img_path = os.path.join(image_folder, image_files[i])
+#                     try:
+#                         img = Image.open(img_path)
+#                         st.image(img, width=400, caption=f"Price: Rs. {drug[3]}")
+#                     except Exception as e:
+#                         st.warning(f"Failed to load image for {drug[0]}: {str(e)}")
+#                 else:
+#                     st.warning("No image available for this drug.")
+
+#                 quantity_slider = st.slider(
+#                     label=f"Select Quantity for {drug[0]}",
+#                     min_value=0,
+#                     max_value=int(drug[3]),
+#                     key=f"slider_{drug[4]}"
+#                 )
+#                 st.info(f"When to Use: {drug[2]}")
+
+#             if st.button("Buy Now"):
+#                 selected_items = []
+#                 for drug in medicines_to_show:
+#                     quantity = st.session_state.get(f"slider_{drug[4]}", 0)
+#                     if quantity > 0:
+#                         selected_items.append((drug[0], quantity))
+
+#                 if selected_items:
+#                     O_items = ",".join([item[0] for item in selected_items])
+#                     O_Qty = ",".join([str(item[1]) for item in selected_items])
+#                     O_id = f"{username}#O{random.randint(0, 1000000)}"
+#                     order_add_data(username, O_items, O_Qty, O_id)
+                    
+#                     # Update drug quantities in the inventory
+#                     for drug_name, quantity_purchased in selected_items:
+#                         update_drug_quantity(drug_name, quantity_purchased)
+                    
+#                     st.success("Order placed successfully!")
+#                 else:
+#                     st.warning("No items selected for purchase.")
+#         else:
+#             st.warning("No medicines available in the inventory.")
           
 # Main Function
 if __name__ == '__main__':
