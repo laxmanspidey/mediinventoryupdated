@@ -92,8 +92,7 @@ st.markdown(
     }
     </style>
 
-    /* Hide Streamlit settings, share, and other options */
-    #MainMenu {visibility: hidden;}
+    MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
     </style>
