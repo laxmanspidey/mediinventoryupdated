@@ -505,7 +505,7 @@ if __name__ == '__main__':
     # Decorate Side Panel
     st.sidebar.markdown(
         """
-        <div class="sidebar-title">Pharmacy Management System</div>
+        <div class="sidebar-title"><h2>Pharmacy Management System</h2></div>
         <br>
         <div class="sidebar-text">
             Welcome to the Pharmacy Management System! This system allows you to manage drugs, customers, and orders efficiently.
