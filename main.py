@@ -567,7 +567,7 @@ if __name__ == '__main__':
         """
         <div class="footer">
             Pharmacy Management System<br>
-            Developed by Laxman<br>
+            Developed by Laxman & Arun<br>
         </div>
         """,
         unsafe_allow_html=True,
