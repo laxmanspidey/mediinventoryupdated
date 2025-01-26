@@ -12,7 +12,7 @@ c = conn.cursor()
 # Custom CSS for Styling
 
 
-st.markdown(
+'''st.markdown(
     """
     <style>
     /* Main Title */
@@ -80,8 +80,74 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+'''
+st.markdown(
+    """
+    <style>
+    /* Main Title */
+    .main-title {
+        font-size: 36px;
+        font-weight: bold;
+        color: #FF5733; /* Changed color */
+        text-align: center;
+        margin-bottom: 20px;
+    }
 
+    /* Sidebar Styling */
+    .sidebar .sidebar-content {
+        background-color: #4A90E2; /* Changed color */
+        color: white;
+        padding: 20px;
+    }
 
+    .sidebar .sidebar-content .sidebar-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .sidebar .sidebar-content .sidebar-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    /* Button Styling */
+    .stButton button {
+        background-color: #34A853; /* Changed color */
+        color: white;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+    }
+
+    .stButton button:hover {
+        background-color: #2E8B57; /* Changed hover color */
+    }
+
+    /* Expander Styling */
+    .stExpander {
+        background-color: #E8F5E9; /* Changed color */
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+    }
+
+    /* Footer Styling */
+    .footer {
+        font-size: 14px;
+        text-align: center;
+        margin-top: 40px;
+        padding: 20px;
+        background-color: #333333; /* Changed color */
+        color: white;
+        border-radius: 5px;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
 def update_drug_quantity(drug_name, quantity_purchased):
     # Fetch the current quantity of the drug
     c.execute('SELECT D_Qty FROM Drugs WHERE D_Name = ?', (drug_name,))
