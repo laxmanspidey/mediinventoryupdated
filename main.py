@@ -10,7 +10,7 @@ conn = sqlite3.connect("drug_data.db", check_same_thread=False)
 c = conn.cursor()
 
 # Custom CSS for Styling
-
+'''
 st.markdown(
     """
     <style>
@@ -93,6 +93,97 @@ st.markdown(
     </style>
 
     MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    </style>
+    """,
+    unsafe_allow_html=True,
+)
+'''
+
+# Custom CSS for Styling
+st.markdown(
+    """
+    <style>
+    /* Main Title */
+    .main-title {
+        font-size: 36px;
+        font-weight: bold;
+        color: #FF5733; /* Changed color */
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    /* Sidebar Styling */
+    .sidebar .sidebar-content {
+        background-color: #4A90E2; /* Changed color */
+        color: white;
+        padding: 20px;
+    }
+
+    .sidebar .sidebar-content .sidebar-title {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 20px;
+    }
+
+    .sidebar .sidebar-content .sidebar-text {
+        font-size: 16px;
+        margin-bottom: 20px;
+    }
+
+    /* Button Styling */
+    .stButton button {
+        background-color: #34A853; /* Changed color */
+        color: white;
+        border-radius: 5px;
+        padding: 10px 20px;
+        font-size: 16px;
+        font-weight: bold;
+        border: none;
+    }
+
+    .stButton button:hover {
+        background-color: #2E8B57; /* Changed hover color */
+    }
+
+    /* Expander Styling */
+    .stExpander {
+        background-color: #1E1E1E; /* Dark background for expander */
+        border-radius: 5px;
+        padding: 10px;
+        margin-bottom: 20px;
+        color: white; /* Text color inside expander */
+    }
+
+    /* DataFrame Styling */
+    .stDataFrame {
+        background-color: #1E1E1E !important; /* Dark background for table */
+        color: white !important; /* Text color for table */
+    }
+
+    .stDataFrame th {
+        background-color: #333333 !important; /* Dark gray for header */
+        color: white !important;
+    }
+
+    .stDataFrame td {
+        border: 1px solid #444444 !important; /* Border color for cells */
+    }
+
+    /* Footer Styling */
+    .footer {
+        font-size: 14px;
+        text-align: center;
+        margin-top: 40px;
+        padding: 20px;
+        background-color: #333333; /* Changed color */
+        color: white;
+        border-radius: 5px;
+    }
+
+    /* Hide Streamlit settings, share, and other options */
+    #MainMenu {visibility: hidden;}
     header {visibility: hidden;}
     footer {visibility: hidden;}
     </style>
