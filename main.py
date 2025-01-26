@@ -81,6 +81,7 @@ c = conn.cursor()
 )
 
 '''
+
 st.markdown(
     """
     <style>
@@ -128,10 +129,26 @@ st.markdown(
 
     /* Expander Styling */
     .stExpander {
-        background-color: #E8F5E9; /* Changed color */
+        background-color: #1E1E1E; /* Dark background for expander */
         border-radius: 5px;
         padding: 10px;
         margin-bottom: 20px;
+        color: white; /* Text color inside expander */
+    }
+
+    /* DataFrame Styling */
+    .stDataFrame {
+        background-color: #1E1E1E !important; /* Dark background for table */
+        color: white !important; /* Text color for table */
+    }
+
+    .stDataFrame th {
+        background-color: #333333 !important; /* Dark gray for header */
+        color: white !important;
+    }
+
+    .stDataFrame td {
+        border: 1px solid #444444 !important; /* Border color for cells */
     }
 
     /* Footer Styling */
@@ -148,6 +165,7 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
+
 def update_drug_quantity(drug_name, quantity_purchased):
     # Fetch the current quantity of the drug
     c.execute('SELECT D_Qty FROM Drugs WHERE D_Name = ?', (drug_name,))
