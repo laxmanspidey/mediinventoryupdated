@@ -91,6 +91,12 @@ st.markdown(
         border-radius: 5px;
     }
     </style>
+
+    /* Hide Streamlit settings, share, and other options */
+    #MainMenu {visibility: hidden;}
+    header {visibility: hidden;}
+    footer {visibility: hidden;}
+    </style>
     """,
     unsafe_allow_html=True,
 )
