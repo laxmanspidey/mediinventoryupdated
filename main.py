@@ -271,8 +271,8 @@ def admin():
             with st.expander("View All Order Data", expanded=True):
                 order_clean_df = pd.DataFrame(order_result, columns=["Name", "Items", "Qty", "ID"])
                 st.dataframe(order_clean_df.style.set_properties(**{'font-size': '16px'}))
-            st.subheader("Order Details (Expanded)")
-            st.dataframe(order_clean_df.style.set_properties(**{'font-size': '16px'}))
+           # st.subheader("Order Details (Expanded)")
+           # st.dataframe(order_clean_df.style.set_properties(**{'font-size': '16px'}))
 
     elif choice == "About":
         st.subheader("MIS Mini Project")
