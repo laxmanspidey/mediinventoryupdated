@@ -278,17 +278,7 @@ def admin():
         st.subheader("MIS Mini Project")
         st.subheader("By Laxman")
 
-'''def getauthenicate(username, password):
-    #print("Auth")
-    c.execute('SELECT C_Password FROM Customers WHERE C_Name = ?', (username,))
-    cust_password = c.fetchall()
-    #print(cust_password[0][0], "Outside password")
-    #print(password, "Parameter password")
-    if cust_password[0][0] == password:
-        #print("Inside password")
-        return True
-    else:
-        return False'''
+
 def getauthenicate(username, password):
     c.execute('SELECT C_Password FROM Customers WHERE C_Name = ?', (username,))
     cust_password = c.fetchall()
@@ -369,81 +359,7 @@ import pillow_avif  # This enables AVIF support in Pillow
 #             st.warning("No medicines available in the inventory.")
 
  
-'''def customer(username, password):
-    if getauthenicate(username, password):
-        st.markdown(f"<div class='main-title'>Welcome {username}!</div>", unsafe_allow_html=True)
-        
-        st.title("Welcome to Pharmacy Store")
-        st.subheader("Your Order Details")
-        order_result = order_view_data(username)
-        with st.expander("View All Order Data"):
-            order_clean_df = pd.DataFrame(order_result, columns=["Name", "Items", "Qty", "ID"])
-            st.dataframe(order_clean_df)
 
-        st.subheader("Available Medicines")
-        drug_result = drug_view_all_data()
-
-        if len(drug_result) > 0:
-            # Supported image formats
-            image_extensions = ['.jpg', '.jpeg', '.png', '.avif']
-            image_folder = "images/"
-
-            # Iterate through all medicines in the database
-            for drug in drug_result:
-                drug_name = drug[0]  # Assuming drug name is the first column in the database
-                st.subheader(drug_name)
-
-                # Try to find the image file with supported extensions
-                image_path = None
-                for ext in image_extensions:
-                    temp_path = os.path.join(image_folder, f"{drug_name}{ext}")
-                    if os.path.exists(temp_path):
-                        image_path = temp_path
-                        break
-
-                # Display the image if found
-                if image_path:
-                    try:
-                        img = Image.open(image_path)
-                        st.image(img, width=400, caption=f"Price: Rs. {drug[3]}")  # Assuming price is the 4th column
-                    except Exception as e:
-                        st.warning(f"Failed to load image for {drug_name}: {str(e)}")
-                else:
-                    st.warning(f"No image found for {drug_name} in supported formats: {', '.join(image_extensions)}")
-
-                # Quantity slider for each drug
-                quantity_slider = st.slider(
-                    label=f"Select Quantity for {drug_name}",
-                    min_value=0,
-                    max_value=int(drug[3]),  # Assuming quantity is the 4th column
-                    key=f"slider_{drug[4]}"  # Assuming drug ID is the 5th column
-                )
-                st.info(f"When to Use: {drug[2]}")  # Assuming usage is the 3rd column
-
-            # Buy Now button
-            if st.button("Buy Now"):
-                selected_items = []
-                for drug in drug_result:
-                    quantity = st.session_state.get(f"slider_{drug[4]}", 0)  # Assuming drug ID is the 5th column
-                    if quantity > 0:
-                        selected_items.append((drug[0], quantity))  # Drug name and quantity
-
-                if selected_items:
-                    O_items = ",".join([item[0] for item in selected_items])
-                    O_Qty = ",".join([str(item[1]) for item in selected_items])
-                    O_id = f"{username}#O{random.randint(0, 1000000)}"
-                    order_add_data(username, O_items, O_Qty, O_id)
-                    
-                    # Update drug quantities in the inventory
-                    for drug_name, quantity_purchased in selected_items:
-                        update_drug_quantity(drug_name, quantity_purchased)
-                    
-                    st.success("Order placed successfully!")
-                else:
-                    st.warning("No items selected for purchase.")
-        else:
-            st.warning("No medicines available in the inventory.") 
- '''
 
 def customer(username, password):
     auth_status, auth_message = getauthenicate(username, password)
@@ -670,75 +586,4 @@ if __name__ == '__main__':
         unsafe_allow_html=True,
     )
 
-'''if __name__ == '__main__':
-    drug_create_table()
-    cust_create_table()
-    order_create_table()
 
-    # Decorate Side Panel
-    st.sidebar.markdown(
-        """
-        <div class="sidebar-title"><h2>Pharmacy Management System</h2></div>
-        <br>
-        <div class="sidebar-text">
-            Welcome to the Pharmacy Management System! This system allows you to manage drugs, customers, and orders efficiently.
-        </div>
-        <br>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    menu = ["Login", "SignUp", "Admin"]
-    choice = st.sidebar.selectbox("Menu", menu)
-
-    if choice == "Login":
-        st.markdown('<div class="main-title">Pharmacy Management System</div>', unsafe_allow_html=True)
-        st.markdown("---")
-        st.markdown("**Login to access your account and manage your orders.**")
-        username = st.sidebar.text_input("User Name")
-        password = st.sidebar.text_input("Password", type='password')
-        if st.sidebar.checkbox(label="Login"):
-            customer(username, password)
-
-    elif choice == "SignUp":
-        st.markdown('<div class="main-title">Pharmacy Management System</div>', unsafe_allow_html=True)
-        st.markdown("---")
-        st.markdown("**Create a new account to start using the Pharmacy Management System.**")
-        cust_name = st.text_input("Name")
-        cust_password = st.text_input("Password", type='password', key=1000)
-        cust_password1 = st.text_input("Confirm Password", type='password', key=1001)
-        col1, col2, col3 = st.columns(3)
-        with col1:
-            cust_email = st.text_area("Email ID", placeholder="Enter your email")
-        with col2:
-            cust_area = st.text_area("State", placeholder="Enter your state")
-        with col3:
-            cust_number = st.text_area("Phone Number", placeholder="Enter your phone number")
-        if st.button("Signup"):
-            if cust_password == cust_password1:
-                customer_add_data(cust_name, cust_password, cust_email, cust_area, cust_number)
-                st.success("Account Created Successfully!")
-                st.info("Go to the Login Menu to log in")
-            else:
-                st.warning('Passwords do not match. Please try again.')
-
-    elif choice == "Admin":
-        st.markdown('<div class="main-title">Pharmacy Management System</div>', unsafe_allow_html=True)
-        st.markdown("---")
-        st.markdown("**Admin Dashboard**")
-        username = st.sidebar.text_input("User Name")
-        password = st.sidebar.text_input("Password", type='password')
-        if username == 'admin' and password == 'admin':
-            admin()
-
-    # Footer
-    st.markdown(
-        """
-        <div class="footer">
-            Pharmacy Management System<br>
-            Developed by Laxman<br>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-'''
